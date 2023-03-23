@@ -49,8 +49,8 @@ const loginUser = async (req, res) => {
         }
         const response = await UserService.loginUser(req.body)
         const { refresh_token, ...newReponse } = response
-        await res.cookie('refresh_token', refresh_token, {
-            httpOnly: true,
+        res.cookie('refresh_token', refresh_token, {
+            maxAge: 60 * 60 * 24,
             // secure: true,
             // sameSite: 'strict',
             // path: '/,

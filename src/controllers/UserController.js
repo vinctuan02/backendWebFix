@@ -53,8 +53,7 @@ const loginUser = async (req, res) => {
             httpOnly: true,
             secure: true,
             sameSite: 'strict',
-            path: '/api/user/refresh-token',
-            domain: 'https://backend-commerce.onrender.com'
+            path: '/,
         })
         return res.status(200).json(newReponse)
     } catch (e) {

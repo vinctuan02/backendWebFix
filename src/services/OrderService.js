@@ -19,28 +19,12 @@ const createOrder = (newOrder) => {
                     {new: true}
                 )
                 if(productData) {
-                    const createdOrder = await Order.create({
-                        orderItems,
-                        shippingAddress: {
-                          fullName,
-                          address,
-                          city, phone
-                        },
-                        paymentMethod,
-                        itemsPrice,
-                        shippingPrice,
-                        totalPrice,
-                        user: user,
-                        isPaid, paidAt
-                    })
-                    if (createdOrder) {
-                        await EmailService.sendEmailCreateOrder(email,orderItems)
-                        return {
-                            status: 'OK',
-                            message: 'SUCCESS'
-                        }
+                    return {
+                        status: 'OK',
+                        message: 'SUCCESS'
                     }
-                } else {
+                }
+                 else {
                     return{
                         status: 'OK',
                         message: 'ERR',
@@ -51,17 +35,39 @@ const createOrder = (newOrder) => {
             const results = await Promise.all(promises)
             const newData = results && results.filter((item) => item.id)
             if(newData.length) {
+                const arrId = []
+                newData.forEach((item) => {
+                    arrId.push(item.id)
+                })
                 resolve({
                     status: 'ERR',
-                    message: `San pham voi id${newData.join(',')} khong du hang`
+                    message: `San pham voi id: ${arrId.join(',')} khong du hang`
                 })
+            } else {
+                const createdOrder = await Order.create({
+                    orderItems,
+                    shippingAddress: {
+                        fullName,
+                        address,
+                        city, phone
+                    },
+                    paymentMethod,
+                    itemsPrice,
+                    shippingPrice,
+                    totalPrice,
+                    user: user,
+                    isPaid, paidAt
+                })
+                if (createdOrder) {
+                    await EmailService.sendEmailCreateOrder(email,orderItems)
+                    resolve({
+                        status: 'OK',
+                        message: 'success'
+                    })
+                }
             }
-            resolve({
-                status: 'OK',
-                message: 'success'
-            })
         } catch (e) {
-          console.log('e', e)
+        //   console.log('e', e)
             reject(e)
         }
     })
@@ -100,7 +106,7 @@ const getAllOrderDetails = (id) => {
                 data: order
             })
         } catch (e) {
-            console.log('e', e)
+            // console.log('e', e)
             reject(e)
         }
     })
@@ -125,7 +131,7 @@ const getOrderDetails = (id) => {
                 data: order
             })
         } catch (e) {
-            console.log('e', e)
+            // console.log('e', e)
             reject(e)
         }
     })
@@ -147,7 +153,6 @@ const cancelOrderDetails = (id, data) => {
                     }},
                     {new: true}
                 )
-                console.log('productData', productData)
                 if(productData) {
                     order = await Order.findByIdAndDelete(id)
                     if (order === null) {
@@ -165,11 +170,12 @@ const cancelOrderDetails = (id, data) => {
                 }
             })
             const results = await Promise.all(promises)
-            const newData = results && results.filter((item) => item)
-            if(newData.length) {
+            const newData = results && results[0].id
+            
+            if(newData) {
                 resolve({
                     status: 'ERR',
-                    message: `San pham voi id${newData.join(',')} khong ton tai`
+                    message: `San pham voi id: ${newData} khong ton tai`
                 })
             }
             resolve({

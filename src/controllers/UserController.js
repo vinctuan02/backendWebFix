@@ -50,10 +50,11 @@ const loginUser = async (req, res) => {
         const response = await UserService.loginUser(req.body)
         const { refresh_token, ...newReponse } = response
         res.cookie('refresh_token', refresh_token, {
-            httpOnly: false,
-            secure: false,
+            httpOnly: true,
+            secure: true,
             sameSite: 'strict',
-            path: '/'
+            path: '/api/user/refresh-token',
+            domain: 'https://backend-commerce.onrender.com'
         })
         return res.status(200).json(newReponse)
     } catch (e) {

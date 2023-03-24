@@ -51,9 +51,9 @@ const loginUser = async (req, res) => {
         const { refresh_token, ...newReponse } = response
         res.cookie('refresh_token', refresh_token, {
             maxAge: 60 * 60 * 24,
-            // secure: true,
-            // sameSite: 'strict',
-            // path: '/,
+            secure: true,
+            sameSite: 'strict',
+            path: 'https://fri-api-pr-31.onrender.com/api',
         })
         return res.status(200).json(newReponse)
     } catch (e) {

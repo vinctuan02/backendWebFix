@@ -92,7 +92,7 @@ const getAllOrderDetails = (id) => {
         try {
             const order = await Order.find({
                 user: id
-            })
+            }).sort({createdAt: -1, updatedAt: -1})
             if (order === null) {
                 resolve({
                     status: 'ERR',

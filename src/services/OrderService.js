@@ -170,7 +170,7 @@ const cancelOrderDetails = (id, data) => {
                 }
             })
             const results = await Promise.all(promises)
-            const newData = results && results[0].id
+            const newData = results && results[0] && results[0].id
             
             if(newData) {
                 resolve({

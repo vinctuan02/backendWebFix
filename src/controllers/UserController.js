@@ -55,7 +55,7 @@ const loginUser = async (req, res) => {
             sameSite: 'strict',
             path: '/',
         })
-        return res.status(200).json({...newReponse, refresh_token})
+        return res.status(200).json({ ...newReponse, refresh_token })
     } catch (e) {
         return res.status(404).json({
             message: e
@@ -120,6 +120,7 @@ const deleteMany = async (req, res) => {
 
 
 const getAllUser = async (req, res) => {
+    // console.log("hello world")
     try {
         const response = await UserService.getAllUser()
         return res.status(200).json(response)
@@ -180,6 +181,11 @@ const logoutUser = async (req, res) => {
         })
     }
 }
+
+const helloWorld = (req, res) => {
+    return res.send("Hello world")
+}
+
 module.exports = {
     createUser,
     loginUser,

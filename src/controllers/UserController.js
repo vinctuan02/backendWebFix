@@ -37,25 +37,33 @@ const loginUser = async (req, res) => {
         const reg = /^\w+([-+.']\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/
         const isCheckEmail = reg.test(email)
         if (!email || !password) {
-            return res.status(200).json({
+            return res.status(404).json({
                 status: 'ERR',
                 message: 'The input is required'
             })
         } else if (!isCheckEmail) {
-            return res.status(200).json({
+            return res.status(404).json({
                 status: 'ERR',
                 message: 'The input is email'
             })
         }
         const response = await UserService.loginUser(req.body)
+        console.log(response)
         const { refresh_token, ...newReponse } = response
-        res.cookie('refresh_token', refresh_token, {
-            httpOnly: true,
-            secure: false,
-            sameSite: 'strict',
-            path: '/',
-        })
-        return res.status(200).json({ ...newReponse, refresh_token })
+        if (response.status !== 'ERR') {
+            res.cookie('refresh_token', refresh_token, {
+                httpOnly: true,
+                secure: false,
+                sameSite: 'strict',
+                path: '/',
+            })
+            return res.status(200).json({ ...newReponse, refresh_token })
+        } else {
+            return res.status(404).json({
+                status: 'ERR',
+                message: response.message
+            })
+        }
     } catch (e) {
         return res.status(404).json({
             message: e

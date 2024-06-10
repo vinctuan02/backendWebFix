@@ -7,7 +7,7 @@ dotenv.config()
 router.get('/config', (req, res) => {
   return res.status(200).json({
     status: 'OK',
-    data: process.env.CLIENT_ID
+    data: 'AfCVOnWRq7DpjBV5_lOWep4ltlQev6KM2aOXwzL_GLhXnLdTNWvOedPZ588zwLK7v8JlpVN4otbRo3-b'
   })
 })
 
